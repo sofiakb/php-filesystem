@@ -1,49 +1,49 @@
 {
-  "name"              : "ssf/php-filesystem",
-  "description"       : "A library for manage file in PHP.",
-  "type"              : "library",
-  "license"           : "MIT",
-  "version"           : "0.0.1-dev",
-  "keywords"          : [
-    "php",
-    "file",
-    "filesystem"
-  ],
-  "require"           : {
-    "php"          : "^7.2",
-    "ext-fileinfo" : "*"
-  },
-  "require-dev"       : {
-    "phpunit/phpunit": "^9.5"
-  },
-  "autoload"          : {
-    "psr-4"    : {
-      "Ssf\\Filesystem\\" : "src/"
+    "name": "ssf/php-filesystem",
+    "description": "A library for manage file in PHP.",
+    "type": "library",
+    "license": "MIT",
+    "version": "0.0.1",
+    "keywords": [
+        "php",
+        "file",
+        "filesystem"
+    ],
+    "require": {
+        "php": "^7.2",
+        "ext-fileinfo": "*"
     },
-    "classmap" : [
-      "tests/"
-    ]
-  },
-  "time"              : "2021-02-26",
-  "authors"           : [
-    {
-      "name"     : "Sofiane Akbly",
-      "email"    : "sofiane.akbly@gmail.com",
-      "homepage" : "https://sofianeakbly.fr",
-      "role"     : "Developer"
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ssf\\Filesystem\\": "src/"
+        },
+        "classmap": [
+            "tests/"
+        ]
+    },
+    "time": "2021-03-05",
+    "authors": [
+        {
+            "name": "Sofiane Akbly",
+            "email": "sofiane.akbly@gmail.com",
+            "homepage": "https://sofianeakbly.fr",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "email": "sofiane.akbly@gmail.com"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true
+    },
+    "scripts": {
+        "phpdoc": "phpdoc --directory . --target docs --title 'FC documentation' --ignore vendor -vv"
     }
-  ],
-  "support"           : {
-    "email" : "sofiane.akbly@gmail.com"
-  },
-  "minimum-stability" : "stable",
-  "prefer-stable"     : true,
-  "config"            : {
-    "preferred-install"   : "dist",
-    "sort-packages"       : true,
-    "optimize-autoloader" : true
-  },
-  "scripts"           : {
-    "phpdoc" : "phpdoc --directory . --target docs --title 'FC documentation' --ignore vendor -vv"
-  }
 }
