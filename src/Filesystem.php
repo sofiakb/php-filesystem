@@ -16,19 +16,19 @@ use Ssf\Filesystem\Tools\Helpers;
  */
 class Filesystem
 {
-
+    
     /**
      * @var Filesystem null
      */
     private static $instance = null;
-
+    
     /**
      * Filesystem constructor.
      */
     public function __construct()
     {
     }
-
+    
     /**
      * @return static|null
      */
@@ -38,7 +38,7 @@ class Filesystem
             self::$instance = new static;
         return self::$instance;
     }
-
+    
     /**
      * Determine if a file or directory exists.
      *
@@ -49,7 +49,7 @@ class Filesystem
     {
         return file_exists($path);
     }
-
+    
     /**
      * Determine if a file or directory is missing.
      *
@@ -60,7 +60,7 @@ class Filesystem
     {
         return !$this->exists($path);
     }
-
+    
     /**
      * Get the contents of a file.
      *
@@ -75,10 +75,10 @@ class Filesystem
         if ($this->isFile($path)) {
             return $lock ? $this->sharedGet($path) : file_get_contents($path);
         }
-
+        
         throw new FileNotFoundException("File does not exist at path {$path}.");
     }
-
+    
     /**
      * Get contents of a file with shared access.
      *
@@ -88,26 +88,27 @@ class Filesystem
     private function sharedGet(string $path)
     {
         $contents = '';
-
+        
         $handle = fopen($path, 'rb');
-
+        
         if ($handle) {
             try {
                 if (flock($handle, LOCK_SH)) {
                     clearstatcache(true, $path);
-
+                    
                     $contents = fread($handle, $this->size($path) ?: 1);
-
+                    
                     flock($handle, LOCK_UN);
                 }
-            } finally {
+            }
+            finally {
                 fclose($handle);
             }
         }
-
+        
         return $contents;
     }
-
+    
     /**
      * Get the contents of a file one line at a time.
      *
@@ -123,19 +124,19 @@ class Filesystem
                 "File does not exist at path {$path}."
             );
         }
-
+        
         $file = new SplFileObject($path);
-
+        
         $file->setFlags(SplFileObject::DROP_NEW_LINE);
         $lines = 0;
-
+        
         while (!$file->eof()) {
             $file->fgets();
             $lines++;
         }
         return $lines;
     }
-
+    
     /**
      * Get the MD5 hash of the file at the given path.
      *
@@ -146,7 +147,7 @@ class Filesystem
     {
         return md5_file($path);
     }
-
+    
     /**
      * Write the contents of a file.
      *
@@ -159,7 +160,7 @@ class Filesystem
     {
         return file_put_contents($path, $contents, $lock ? LOCK_EX : 0);
     }
-
+    
     /**
      * Write the contents of a file, replacing it atomically if it already exists.
      *
@@ -171,19 +172,19 @@ class Filesystem
     {
         // If the path already exists and is a symlink, get the real path...
         clearstatcache(true, $path);
-
+        
         $path = realpath($path) ?: $path;
-
+        
         $tempPath = tempnam(dirname($path), basename($path));
-
+        
         // Fix permissions of tempPath because `tempnam()` creates it with permissions set to 0600...
         chmod($tempPath, 0777 - umask());
-
+        
         file_put_contents($tempPath, $content);
-
+        
         rename($tempPath, $path);
     }
-
+    
     /**
      * Prepend to a file.
      *
@@ -197,10 +198,10 @@ class Filesystem
         if ($this->exists($path)) {
             return $this->put($path, $data . $this->get($path));
         }
-
+        
         return $this->put($path, $data);
     }
-
+    
     /**
      * Append to a file.
      *
@@ -212,7 +213,7 @@ class Filesystem
     {
         return file_put_contents($path, $data, FILE_APPEND);
     }
-
+    
     /**
      * Get or set UNIX mode of a file or directory.
      *
@@ -225,10 +226,10 @@ class Filesystem
         if ($mode) {
             return chmod($path, $mode);
         }
-
+        
         return substr(sprintf('%o', fileperms($path)), -4);
     }
-
+    
     /**
      * Delete the file at a given path.
      *
@@ -238,22 +239,23 @@ class Filesystem
     public function delete($paths)
     {
         $paths = is_array($paths) ? $paths : func_get_args();
-
+        
         $success = true;
-
+        
         foreach ($paths as $path) {
             try {
                 if (!@unlink($path)) {
                     $success = false;
                 }
-            } catch (ErrorException $e) {
+            }
+            catch (ErrorException $e) {
                 $success = false;
             }
         }
-
+        
         return $success;
     }
-
+    
     /**
      * Move a file to a new location.
      *
@@ -265,7 +267,7 @@ class Filesystem
     {
         return rename($path, $target);
     }
-
+    
     /**
      * Move a file to a new location.
      *
@@ -277,7 +279,7 @@ class Filesystem
     {
         return $this->move($path, $target);
     }
-
+    
     /**
      * Copy a file to a new location.
      *
@@ -289,7 +291,7 @@ class Filesystem
     {
         return copy($path, $target);
     }
-
+    
     /**
      * Create a symlink to the target file or directory. On Windows, a hard link is created if the target is a file.
      *
@@ -302,12 +304,12 @@ class Filesystem
         if (!Helpers::windows_os()) {
             return symlink($target, $link);
         }
-
+        
         $mode = $this->isDirectory($target) ? 'J' : 'H';
-
+        
         exec("mklink /{$mode} " . escapeshellarg($link) . ' ' . escapeshellarg($target));
     }
-
+    
     /**
      * Extract the file name from a file path.
      *
@@ -318,7 +320,7 @@ class Filesystem
     {
         return pathinfo($path, PATHINFO_FILENAME);
     }
-
+    
     /**
      * Extract the trailing name component from a file path.
      *
@@ -329,7 +331,7 @@ class Filesystem
     {
         return pathinfo($path, PATHINFO_BASENAME);
     }
-
+    
     /**
      * Extract the parent directory from a file path.
      *
@@ -340,7 +342,7 @@ class Filesystem
     {
         return pathinfo($path, PATHINFO_DIRNAME);
     }
-
+    
     /**
      * Extract the file extension from a file path.
      *
@@ -351,7 +353,7 @@ class Filesystem
     {
         return pathinfo($path, PATHINFO_EXTENSION);
     }
-
+    
     /**
      * Get the file type of a given file.
      *
@@ -362,7 +364,7 @@ class Filesystem
     {
         return filetype($path);
     }
-
+    
     /**
      * Get the mime-type of a given file.
      *
@@ -373,7 +375,7 @@ class Filesystem
     {
         return finfo_file(finfo_open(FILEINFO_MIME_TYPE), $path);
     }
-
+    
     /**
      * Get the file size of a given file.
      *
@@ -385,7 +387,7 @@ class Filesystem
     {
         return $humanize ? Helpers::humanizeSize(filesize($path)) : filesize($path);
     }
-
+    
     /**
      * Get the file's last modification time.
      *
@@ -396,7 +398,7 @@ class Filesystem
     {
         return filemtime($path);
     }
-
+    
     /**
      * Determine if the given path is a directory.
      *
@@ -407,8 +409,8 @@ class Filesystem
     {
         return is_dir($directory);
     }
-
-
+    
+    
     /**
      * Determine if the given path is readable.
      *
@@ -419,7 +421,7 @@ class Filesystem
     {
         return is_readable($path);
     }
-
+    
     /**
      * Determine if the given path is writable.
      *
@@ -430,7 +432,7 @@ class Filesystem
     {
         return is_writable($path);
     }
-
+    
     /**
      * Determine if the given path is a file.
      *
@@ -441,8 +443,8 @@ class Filesystem
     {
         return is_file($file);
     }
-
-
+    
+    
     /**
      * Get an array of all files in a directory.
      *
@@ -459,7 +461,7 @@ class Filesystem
             ->sortByName()
             ->get();
     }
-
+    
     /**
      * Get all of the directories within a given directory.
      *
@@ -474,7 +476,7 @@ class Filesystem
             ->sortByName()
             ->get();
     }
-
+    
     /**
      * Ensure a directory exists.
      *
@@ -489,7 +491,7 @@ class Filesystem
             $this->makeDirectory($path, $mode, $recursive);
         }
     }
-
+    
     /**
      * Create a directory.
      *
@@ -504,10 +506,10 @@ class Filesystem
         if ($force) {
             return @mkdir($path, $mode, $recursive);
         }
-
+        
         return mkdir($path, $mode, $recursive);
     }
-
+    
     /**
      * Move a directory.
      *
@@ -521,10 +523,10 @@ class Filesystem
         if ($overwrite && $this->isDirectory($to) && !$this->deleteDirectory($to)) {
             return false;
         }
-
+        
         return @rename($from, $to) === true;
     }
-
+    
     /**
      * Copy a directory from one location to another.
      *
@@ -538,30 +540,30 @@ class Filesystem
         if (!$this->isDirectory($directory)) {
             return false;
         }
-
+        
         $options = $options ?: FilesystemIterator::SKIP_DOTS;
-
+        
         // If the destination directory does not actually exist, we will go ahead and
         // create it recursively, which just gets the destination prepared to copy
         // the files over. Once we make the directory we'll proceed the copying.
         $this->ensureDirectoryExists($destination, 0777);
-
+        
         $items = new FilesystemIterator($directory, $options);
-
+        
         foreach ($items as $item) {
             // As we spin through items, we will check to see if the current file is actually
             // a directory or a file. When it is actually a directory we will need to call
             // back into this function recursively to keep copying these nested folders.
             $target = $destination . '/' . $item->getBasename();
-
+            
             if ($item->isDir()) {
                 $path = $item->getPathname();
-
+                
                 if (!$this->copyDirectory($path, $target, $options)) {
                     return false;
                 }
             }
-
+            
             // If the current items is just a regular file, we will just copy this to the new
             // location and keep looping. If for some reason the copy fails we'll bail out
             // and return false, so the developer is aware that the copy process failed.
@@ -571,10 +573,10 @@ class Filesystem
                 }
             }
         }
-
+        
         return true;
     }
-
+    
     /**
      * Recursively delete a directory.
      *
@@ -589,9 +591,9 @@ class Filesystem
         if (!$this->isDirectory($directory)) {
             return false;
         }
-
+        
         $items = new FilesystemIterator($directory);
-
+        
         foreach ($items as $item) {
             // If the item is a directory, we can just recurse into the function and
             // delete that sub-directory otherwise we'll just delete the file and
@@ -599,7 +601,7 @@ class Filesystem
             if ($item->isDir() && !$item->isLink()) {
                 $this->deleteDirectory($item->getPathname());
             }
-
+            
             // If the item is just a file, we can go ahead and delete it since we're
             // just looping through and waxing all of the files in this directory
             // and calling directories recursively, so we delete the real path.
@@ -607,14 +609,14 @@ class Filesystem
                 $this->delete($item->getPathname());
             }
         }
-
+        
         if (!$preserve) {
             @rmdir($directory);
         }
-
+        
         return true;
     }
-
+    
     /**
      * Remove all of the directories within a given directory.
      *
@@ -624,18 +626,18 @@ class Filesystem
     public function deleteDirectories(string $directory)
     {
         $allDirectories = $this->directories($directory);
-
+        
         if (!empty($allDirectories)) {
             foreach ($allDirectories as $directoryName) {
                 $this->deleteDirectory($directoryName);
             }
-
+            
             return true;
         }
-
+        
         return false;
     }
-
+    
     /**
      * Empty the specified directory of all files and folders.
      *
@@ -646,5 +648,16 @@ class Filesystem
     {
         return $this->deleteDirectory($directory, true);
     }
-
+    
+    /**
+     * Detect file eol.
+     *
+     * @param string $filepath
+     * @return bool|string
+     */
+    public function eol(string $filepath)
+    {
+        return Eol::detectFileEOL($filepath);
+    }
+    
 }

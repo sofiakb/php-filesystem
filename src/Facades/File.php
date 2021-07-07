@@ -44,6 +44,7 @@ use Ssf\Filesystem\Filesystem;
  * @method static bool cleanDirectory(string $directory)
  * @method static \Ssf\Filesystem\File[] files(string $directory, $hidden = false)
  * @method static \Ssf\Filesystem\File[] directories(string $directory)
+ * @method static string eol(string $filepath)
  * @see Filesystem
  */
 class File extends Facade

@@ -45,6 +45,7 @@ use Exception;
  * @method static bool cleanDirectory()
  * @method static \Ssf\Filesystem\File[] files($hidden = false)
  * @method static \Ssf\Filesystem\File[] directories()
+ * @method static string eol(string $filepath)
  * @see Filesystem
  */
 class File
