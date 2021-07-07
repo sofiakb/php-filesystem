@@ -3,7 +3,7 @@
     "description": "A library for manage file in PHP.",
     "type": "library",
     "license": "MIT",
-    "version": "v0.0.2-beta1",
+    "version": "v0.0.2-beta2",
     "keywords": [
         "php",
         "file",
