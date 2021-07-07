@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Ssf\Filesystem\Tools;
+namespace Sofiakb\Filesystem\Tools;
 
 
 class Helpers

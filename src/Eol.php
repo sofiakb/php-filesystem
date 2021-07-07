@@ -7,9 +7,9 @@
  * Time: 11:25
  */
 
-namespace Ssf\Filesystem;
+namespace Sofiakb\Filesystem;
 
-use Ssf\Filesystem\Facades\File as FileFacade;
+use Sofiakb\Filesystem\Facades\File as FileFacade;
 
 class Eol
 {

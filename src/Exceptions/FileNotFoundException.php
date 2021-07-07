@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Ssf\Filesystem\Exceptions;
+namespace Sofiakb\Filesystem\Exceptions;
 
 
 use Exception;

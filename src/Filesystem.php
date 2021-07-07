@@ -1,18 +1,18 @@
 <?php
 
 
-namespace Ssf\Filesystem;
+namespace Sofiakb\Filesystem;
 
 
 use ErrorException;
 use FilesystemIterator;
 use SplFileObject;
-use Ssf\Filesystem\Exceptions\FileNotFoundException;
-use Ssf\Filesystem\Tools\Helpers;
+use Sofiakb\Filesystem\Exceptions\FileNotFoundException;
+use Sofiakb\Filesystem\Tools\Helpers;
 
 /**
  * Class Filesystem
- * @package Ssf\Filesystem
+ * @package Sofiakb\Filesystem
  */
 class Filesystem
 {

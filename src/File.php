@@ -1,14 +1,14 @@
 <?php
 
 
-namespace Ssf\Filesystem;
+namespace Sofiakb\Filesystem;
 
 
 use Exception;
 
 /**
  * Class File
- * @package Ssf\Filesystem
+ * @package Sofiakb\Filesystem
  *
  * @method static bool exists()
  * @method static bool missing()
@@ -43,8 +43,8 @@ use Exception;
  * @method static bool deleteDirectory($preserve = false)
  * @method static bool deleteDirectories()
  * @method static bool cleanDirectory()
- * @method static \Ssf\Filesystem\File[] files($hidden = false)
- * @method static \Ssf\Filesystem\File[] directories()
+ * @method static \Sofiakb\Filesystem\File[] files($hidden = false)
+ * @method static \Sofiakb\Filesystem\File[] directories()
  * @method static string eol(string $filepath)
  * @see Filesystem
  */

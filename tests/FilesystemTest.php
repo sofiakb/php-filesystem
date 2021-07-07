@@ -1,6 +1,6 @@
 <?php
 
-use Ssf\Filesystem\Filesystem;
+use Sofiakb\Filesystem\Filesystem;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -100,7 +100,7 @@ class FilesystemTest extends TestCase
     /**
      * @param int $previous
      * @return string
-     * @throws \Ssf\Filesystem\Exceptions\FileNotFoundException
+     * @throws \Sofiakb\Filesystem\Exceptions\FileNotFoundException
      */
     private function prepend($previous = 0)
     {
@@ -121,7 +121,7 @@ class FilesystemTest extends TestCase
 
     /**
      * @param $content
-     * @throws \Ssf\Filesystem\Exceptions\FileNotFoundException
+     * @throws \Sofiakb\Filesystem\Exceptions\FileNotFoundException
      */
     private function get($content)
     {
@@ -129,7 +129,7 @@ class FilesystemTest extends TestCase
     }
 
     /**
-     * @throws \Ssf\Filesystem\Exceptions\FileNotFoundException
+     * @throws \Sofiakb\Filesystem\Exceptions\FileNotFoundException
      */
     private function lines()
     {
@@ -254,6 +254,6 @@ class FilesystemTest extends TestCase
      bool deleteDirectory(string $directory, $preserve = false)
      bool deleteDirectories(string $directory)
      bool cleanDirectory(string $directory)
-     \Ssf\Filesystem\File[] files(string $directory, $hidden = false)
-     \Ssf\Filesystem\File[] directories(string $directory)*/
+     \Sofiakb\Filesystem\File[] files(string $directory, $hidden = false)
+     \Sofiakb\Filesystem\File[] directories(string $directory)*/
 }

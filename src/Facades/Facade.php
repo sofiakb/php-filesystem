@@ -1,11 +1,11 @@
 <?php
 
 
-namespace Ssf\Filesystem\Facades;
+namespace Sofiakb\Filesystem\Facades;
 
 
 use Exception;
-use Ssf\Filesystem\Filesystem;
+use Sofiakb\Filesystem\Filesystem;
 
 class Facade
 {

@@ -1,14 +1,14 @@
 <?php
 
 
-namespace Ssf\Filesystem;
+namespace Sofiakb\Filesystem;
 
 
 use DirectoryIterator;
 
 /**
  * Class Finder
- * @package Ssf\Filesystem
+ * @package Sofiakb\Filesystem
  */
 class Finder
 {

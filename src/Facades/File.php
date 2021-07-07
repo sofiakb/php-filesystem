@@ -1,13 +1,13 @@
 <?php
 
 
-namespace Ssf\Filesystem\Facades;
+namespace Sofiakb\Filesystem\Facades;
 
-use Ssf\Filesystem\Filesystem;
+use Sofiakb\Filesystem\Filesystem;
 
 /**
  * Class File
- * @package Ssf\Filesystem\Facades
+ * @package Sofiakb\Filesystem\Facades
  *
  * @method static bool exists(string $path)
  * @method static bool missing(string $path)
@@ -42,8 +42,8 @@ use Ssf\Filesystem\Filesystem;
  * @method static bool deleteDirectory(string $directory, $preserve = false)
  * @method static bool deleteDirectories(string $directory)
  * @method static bool cleanDirectory(string $directory)
- * @method static \Ssf\Filesystem\File[] files(string $directory, $hidden = false)
- * @method static \Ssf\Filesystem\File[] directories(string $directory)
+ * @method static \Sofiakb\Filesystem\File[] files(string $directory, $hidden = false)
+ * @method static \Sofiakb\Filesystem\File[] directories(string $directory)
  * @method static string eol(string $filepath)
  * @see Filesystem
  */

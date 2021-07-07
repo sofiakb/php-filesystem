@@ -1,5 +1,5 @@
 {
-    "name": "ssf/php-filesystem",
+    "name": "sofiakb/php-filesystem",
     "description": "A library for manage file in PHP.",
     "type": "library",
     "license": "MIT",
@@ -18,7 +18,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Ssf\\Filesystem\\": "src/"
+            "Sofiakb\\Filesystem\\": "src/"
         },
         "classmap": [
             "tests/"
@@ -27,14 +27,14 @@
     "time": "2021-07-07",
     "authors": [
         {
-            "name": "Sofiane Akbly",
-            "email": "sofiane.akbly@gmail.com",
+            "name": "Sofiakb",
+            "email": "contact.sofiakb@gmail.com",
             "homepage": "https://sofianeakbly.fr",
             "role": "Developer"
         }
     ],
     "support": {
-        "email": "sofiane.akbly@gmail.com"
+        "email": "contact.sofiakb@gmail.com"
     },
     "minimum-stability": "stable",
     "prefer-stable": true,
