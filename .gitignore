@@ -3,3 +3,5 @@
 /vendor/
 /test.php
 /test.txt
+/tests/folder/test.txt
+/tests/folder/test2.txt
