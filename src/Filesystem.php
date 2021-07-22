@@ -660,4 +660,17 @@ class Filesystem
         return Eol::detectFileEOL($filepath);
     }
     
+    /**
+     * Count number rows of file.
+     *
+     * @param string $filepath
+     * @return bool|string
+     */
+    public function rows(string $filepath) {
+        $count = 0;
+        $handle = fopen($filepath, 'r');
+        while (fgets($handle)) $count++;
+        return $count;
+    }
+    
 }
