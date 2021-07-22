@@ -3,7 +3,7 @@
     "description": "A library for manage file in PHP.",
     "type": "library",
     "license": "MIT",
-    "version": "v0.0.2-beta3",
+    "version": "v0.0.2-beta4",
     "keywords": [
         "php",
         "file",
@@ -24,7 +24,7 @@
             "tests/"
         ]
     },
-    "time": "2021-07-07",
+    "time": "2021-07-22",
     "authors": [
         {
             "name": "Sofiakb",
