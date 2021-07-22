@@ -45,6 +45,7 @@ use Sofiakb\Filesystem\Filesystem;
  * @method static \Sofiakb\Filesystem\File[] files(string $directory, $hidden = false)
  * @method static \Sofiakb\Filesystem\File[] directories(string $directory)
  * @method static string eol(string $filepath)
+ * @method static int $rows(string $filepath)
  * @see Filesystem
  */
 class File extends Facade
