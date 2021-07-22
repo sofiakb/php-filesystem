@@ -46,6 +46,7 @@ use Exception;
  * @method static \Sofiakb\Filesystem\File[] files($hidden = false)
  * @method static \Sofiakb\Filesystem\File[] directories()
  * @method static string eol(string $filepath)
+ * @method static int $rows(string $filepath)
  * @see Filesystem
  */
 class File
