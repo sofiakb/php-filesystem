@@ -42,6 +42,7 @@ use Sofiakb\Filesystem\Filesystem;
  * @method static bool deleteDirectory(string $directory, $preserve = false)
  * @method static bool deleteDirectories(string $directory)
  * @method static bool cleanDirectory(string $directory)
+ * @method static void ensureDirectoryExists(string $path, int $mode = 0755, bool $recursive = true)
  * @method static \Sofiakb\Filesystem\File[] files(string $directory, $hidden = false)
  * @method static \Sofiakb\Filesystem\File[] directories(string $directory)
  * @method static string eol(string $filepath)
