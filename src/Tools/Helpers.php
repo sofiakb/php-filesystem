@@ -22,7 +22,7 @@ class Helpers
      * @param bool $unit
      * @return string
      */
-    public static function humanizeSize($size = null, $unit = true): string
+    public static function humanizeSize($size = null, bool $unit = true): string
     {
         if ($size / 1000 < 1000) {
             $size = $size / 1000;

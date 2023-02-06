@@ -43,36 +43,36 @@ use Exception;
  * @method static bool deleteDirectory($preserve = false)
  * @method static bool deleteDirectories()
  * @method static bool cleanDirectory()
- * @method static \Sofiakb\Filesystem\File[] files($hidden = false)
- * @method static \Sofiakb\Filesystem\File[] directories()
+ * @method static File[] files($hidden = false)
+ * @method static File[] directories()
  * @method static string eol(string $filepath)
  * @method static int $rows(string $filepath)
  * @see Filesystem
  */
 class File
 {
-
+    
     /**
      * @var string $path
      */
-    private $path;
-
+    private string $path;
+    
     /**
      * @var string $path
      */
-    private $name;
-
+    private string $name;
+    
     /**
      * File constructor.
      * @param string $path
      * @param bool $directory
      */
-    public function __construct($path, bool $directory = false)
+    public function __construct(string $path, bool $directory = false)
     {
         $this->path = $directory ? Facades\File::dirname($path) : $path;
         $this->name = Facades\File::basename($path);
     }
-
+    
     /**
      * @param $name
      * @param $arguments
@@ -85,17 +85,17 @@ class File
             return call_user_func_array(array($this->filesystem(), $name), array_merge([$this->path], $arguments));
         } else throw new Exception("Method [$name] not found in " . Filesystem::class);
     }
-
+    
     /**
      * Get the filesystem singleton
      *
      * @return Filesystem|null
      */
-    private function filesystem()
+    private function filesystem(): ?Filesystem
     {
         return Filesystem::getInstance();
     }
-
+    
     /**
      * @return string
      */
@@ -103,7 +103,7 @@ class File
     {
         return $this->path;
     }
-
+    
     /**
      * @return string
      */
@@ -111,5 +111,5 @@ class File
     {
         return $this->name;
     }
-
+    
 }

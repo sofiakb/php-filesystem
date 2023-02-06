@@ -11,19 +11,19 @@ class FilesystemTest extends TestCase
     /**
      * @var Filesystem|null
      */
-    private $filesystem;
+    private ?Filesystem $filesystem;
     /**
      * @var string
      */
-    private $path;
+    private string $path;
     /**
      * @var string
      */
-    private $file;
+    private string $file;
     /**
      * @var false|string
      */
-    private $hash;
+    private string|false $hash;
 
     /**
      * FilesystemTest constructor.

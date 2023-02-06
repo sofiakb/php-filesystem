@@ -28,7 +28,7 @@ class Facade
      *
      * @return Filesystem|null
      */
-    private static function filesystem()
+    private static function filesystem(): ?Filesystem
     {
         return Filesystem::getInstance();
     }

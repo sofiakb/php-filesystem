@@ -4,11 +4,10 @@
 namespace Sofiakb\Filesystem;
 
 
-use ErrorException;
 use FilesystemIterator;
-use SplFileObject;
 use Sofiakb\Filesystem\Exceptions\FileNotFoundException;
 use Sofiakb\Filesystem\Tools\Helpers;
+use SplFileObject;
 
 /**
  * Class Filesystem
@@ -18,9 +17,9 @@ class Filesystem
 {
     
     /**
-     * @var Filesystem null
+     * @var Filesystem|null
      */
-    private static $instance = null;
+    private static ?Filesystem $instance = null;
     
     /**
      * Filesystem constructor.
@@ -32,7 +31,7 @@ class Filesystem
     /**
      * @return static|null
      */
-    public static function getInstance()
+    public static function getInstance(): ?Filesystem
     {
         if (is_null(self::$instance))
             self::$instance = new static;
@@ -70,13 +69,13 @@ class Filesystem
      *
      * @throws FileNotFoundException
      */
-    public function get(string $path, bool $lock = false)
+    public function get(string $path, bool $lock = false): string
     {
         if ($this->isFile($path)) {
             return $lock ? $this->sharedGet($path) : file_get_contents($path);
         }
         
-        throw new FileNotFoundException("File does not exist at path {$path}.");
+        throw new FileNotFoundException("File does not exist at path $path.");
     }
     
     /**
@@ -85,7 +84,7 @@ class Filesystem
      * @param string $path
      * @return string
      */
-    private function sharedGet(string $path)
+    private function sharedGet(string $path): string
     {
         $contents = '';
         
@@ -117,11 +116,11 @@ class Filesystem
      *
      * @throws FileNotFoundException
      */
-    public function lines(string $path)
+    public function lines(string $path): int
     {
         if (!$this->isFile($path)) {
             throw new FileNotFoundException(
-                "File does not exist at path {$path}."
+                "File does not exist at path $path."
             );
         }
         
@@ -143,7 +142,7 @@ class Filesystem
      * @param string $path
      * @return string
      */
-    public function hash(string $path)
+    public function hash(string $path): string
     {
         return md5_file($path);
     }
@@ -156,7 +155,7 @@ class Filesystem
      * @param bool $lock
      * @return int|bool
      */
-    public function put(string $path, string $contents, bool $lock = false)
+    public function put(string $path, string $contents, bool $lock = false): int|bool
     {
         return file_put_contents($path, $contents, $lock ? LOCK_EX : 0);
     }
@@ -168,7 +167,7 @@ class Filesystem
      * @param string $content
      * @return void
      */
-    public function replace(string $path, string $content)
+    public function replace(string $path, string $content): void
     {
         // If the path already exists and is a symlink, get the real path...
         clearstatcache(true, $path);
@@ -193,7 +192,7 @@ class Filesystem
      * @return int
      * @throws FileNotFoundException
      */
-    public function prepend(string $path, string $data)
+    public function prepend(string $path, string $data): int
     {
         if ($this->exists($path)) {
             return $this->put($path, $data . $this->get($path));
@@ -209,7 +208,7 @@ class Filesystem
      * @param string $data
      * @return int
      */
-    public function append(string $path, string $data)
+    public function append(string $path, string $data): int
     {
         return file_put_contents($path, $data, FILE_APPEND);
     }
@@ -219,9 +218,9 @@ class Filesystem
      *
      * @param string $path
      * @param int|null $mode
-     * @return mixed
+     * @return bool|string
      */
-    public function chmod(string $path, $mode = null)
+    public function chmod(string $path, int $mode = null): bool|string
     {
         if ($mode) {
             return chmod($path, $mode);
@@ -233,22 +232,17 @@ class Filesystem
     /**
      * Delete the file at a given path.
      *
-     * @param string|array $paths
+     * @param array|string $paths
      * @return bool
      */
-    public function delete($paths)
+    public function delete(array|string $paths): bool
     {
         $paths = is_array($paths) ? $paths : func_get_args();
         
         $success = true;
         
         foreach ($paths as $path) {
-            try {
-                if (!@unlink($path)) {
-                    $success = false;
-                }
-            }
-            catch (ErrorException $e) {
+            if (!@unlink($path)) {
                 $success = false;
             }
         }
@@ -263,7 +257,7 @@ class Filesystem
      * @param string $target
      * @return bool
      */
-    public function move(string $path, string $target)
+    public function move(string $path, string $target): bool
     {
         return rename($path, $target);
     }
@@ -275,7 +269,7 @@ class Filesystem
      * @param string $target
      * @return bool
      */
-    public function rename(string $path, string $target)
+    public function rename(string $path, string $target): bool
     {
         return $this->move($path, $target);
     }
@@ -287,7 +281,7 @@ class Filesystem
      * @param string $target
      * @return bool
      */
-    public function copy(string $path, string $target)
+    public function copy(string $path, string $target): bool
     {
         return copy($path, $target);
     }
@@ -307,7 +301,7 @@ class Filesystem
         
         $mode = $this->isDirectory($target) ? 'J' : 'H';
         
-        exec("mklink /{$mode} " . escapeshellarg($link) . ' ' . escapeshellarg($target));
+        exec("mklink /$mode " . escapeshellarg($link) . ' ' . escapeshellarg($target));
     }
     
     /**
@@ -316,7 +310,7 @@ class Filesystem
      * @param string $path
      * @return string
      */
-    public function name(string $path)
+    public function name(string $path): string
     {
         return pathinfo($path, PATHINFO_FILENAME);
     }
@@ -327,7 +321,7 @@ class Filesystem
      * @param string $path
      * @return string
      */
-    public function basename(string $path)
+    public function basename(string $path): string
     {
         return pathinfo($path, PATHINFO_BASENAME);
     }
@@ -338,7 +332,7 @@ class Filesystem
      * @param string $path
      * @return string
      */
-    public function dirname(string $path)
+    public function dirname(string $path): string
     {
         return pathinfo($path, PATHINFO_DIRNAME);
     }
@@ -349,18 +343,18 @@ class Filesystem
      * @param string $path
      * @return string
      */
-    public function extension(string $path)
+    public function extension(string $path): string
     {
         return pathinfo($path, PATHINFO_EXTENSION);
     }
     
     /**
-     * Get the file type of a given file.
+     * Get the file type of given file.
      *
      * @param string $path
      * @return string
      */
-    public function type(string $path)
+    public function type(string $path): string
     {
         return filetype($path);
     }
@@ -371,7 +365,7 @@ class Filesystem
      * @param string $path
      * @return string|false
      */
-    public function mimeType(string $path)
+    public function mimeType(string $path): string|false
     {
         return finfo_file(finfo_open(FILEINFO_MIME_TYPE), $path);
     }
@@ -383,7 +377,7 @@ class Filesystem
      * @param bool $humanize
      * @return int
      */
-    public function size(string $path, bool $humanize = false)
+    public function size(string $path, bool $humanize = false): int
     {
         return $humanize ? Helpers::humanizeSize(filesize($path)) : filesize($path);
     }
@@ -394,7 +388,7 @@ class Filesystem
      * @param string $path
      * @return int
      */
-    public function lastModified(string $path)
+    public function lastModified(string $path): int
     {
         return filemtime($path);
     }
@@ -405,7 +399,7 @@ class Filesystem
      * @param string $directory
      * @return bool
      */
-    public function isDirectory(string $directory)
+    public function isDirectory(string $directory): bool
     {
         return is_dir($directory);
     }
@@ -417,7 +411,7 @@ class Filesystem
      * @param string $path
      * @return bool
      */
-    public function isReadable(string $path)
+    public function isReadable(string $path): bool
     {
         return is_readable($path);
     }
@@ -428,7 +422,7 @@ class Filesystem
      * @param string $path
      * @return bool
      */
-    public function isWritable(string $path)
+    public function isWritable(string $path): bool
     {
         return is_writable($path);
     }
@@ -439,7 +433,7 @@ class Filesystem
      * @param string $file
      * @return bool
      */
-    public function isFile(string $file)
+    public function isFile(string $file): bool
     {
         return is_file($file);
     }
@@ -452,7 +446,7 @@ class Filesystem
      * @param bool $hidden
      * @return File[]
      */
-    public function files(string $directory, $hidden = false)
+    public function files(string $directory, bool $hidden = false): array
     {
         return Finder::create()
             ->in($directory)
@@ -463,12 +457,12 @@ class Filesystem
     }
     
     /**
-     * Get all of the directories within a given directory.
+     * Get all the directories within a given directory.
      *
      * @param string $directory
      * @return File[]
      */
-    public function directories(string $directory)
+    public function directories(string $directory): array
     {
         return Finder::create()
             ->in($directory)
@@ -485,7 +479,7 @@ class Filesystem
      * @param bool $recursive
      * @return void
      */
-    public function ensureDirectoryExists(string $path, $mode = 0755, $recursive = true)
+    public function ensureDirectoryExists(string $path, int $mode = 0755, bool $recursive = true): void
     {
         if (!$this->isDirectory($path)) {
             $this->makeDirectory($path, $mode, $recursive);
@@ -501,7 +495,7 @@ class Filesystem
      * @param bool $force
      * @return bool
      */
-    public function makeDirectory(string $path, $mode = 0755, $recursive = false, $force = false)
+    public function makeDirectory(string $path, int $mode = 0755, bool $recursive = false, bool $force = false): bool
     {
         if ($force) {
             return @mkdir($path, $mode, $recursive);
@@ -518,7 +512,7 @@ class Filesystem
      * @param bool $overwrite
      * @return bool
      */
-    public function moveDirectory(string $from, string $to, $overwrite = false)
+    public function moveDirectory(string $from, string $to, bool $overwrite = false): bool
     {
         if ($overwrite && $this->isDirectory($to) && !$this->deleteDirectory($to)) {
             return false;
@@ -535,7 +529,7 @@ class Filesystem
      * @param int|null $options
      * @return bool
      */
-    public function copyDirectory(string $directory, string $destination, $options = null)
+    public function copyDirectory(string $directory, string $destination, int $options = null): bool
     {
         if (!$this->isDirectory($directory)) {
             return false;
@@ -586,7 +580,7 @@ class Filesystem
      * @param bool $preserve
      * @return bool
      */
-    public function deleteDirectory(string $directory, $preserve = false)
+    public function deleteDirectory(string $directory, bool $preserve = false): bool
     {
         if (!$this->isDirectory($directory)) {
             return false;
@@ -596,14 +590,14 @@ class Filesystem
         
         foreach ($items as $item) {
             // If the item is a directory, we can just recurse into the function and
-            // delete that sub-directory otherwise we'll just delete the file and
+            // delete that subdirectory otherwise we'll just delete the file and
             // keep iterating through each file until the directory is cleaned.
             if ($item->isDir() && !$item->isLink()) {
                 $this->deleteDirectory($item->getPathname());
             }
             
             // If the item is just a file, we can go ahead and delete it since we're
-            // just looping through and waxing all of the files in this directory
+            // just looping through and waxing all the files in this directory
             // and calling directories recursively, so we delete the real path.
             else {
                 $this->delete($item->getPathname());
@@ -618,18 +612,18 @@ class Filesystem
     }
     
     /**
-     * Remove all of the directories within a given directory.
+     * Remove all the directories within a given directory.
      *
      * @param string $directory
      * @return bool
      */
-    public function deleteDirectories(string $directory)
+    public function deleteDirectories(string $directory): bool
     {
         $allDirectories = $this->directories($directory);
         
         if (!empty($allDirectories)) {
-            foreach ($allDirectories as $directoryName) {
-                $this->deleteDirectory($directoryName);
+            foreach ($allDirectories as $directoryItem) {
+                $this->deleteDirectory($directoryItem->getPath());
             }
             
             return true;
@@ -644,7 +638,7 @@ class Filesystem
      * @param string $directory
      * @return bool
      */
-    public function cleanDirectory(string $directory)
+    public function cleanDirectory(string $directory): bool
     {
         return $this->deleteDirectory($directory, true);
     }
@@ -655,7 +649,7 @@ class Filesystem
      * @param string $filepath
      * @return bool|string
      */
-    public function eol(string $filepath)
+    public function eol(string $filepath): bool|string
     {
         return Eol::detectFileEOL($filepath);
     }
@@ -666,7 +660,8 @@ class Filesystem
      * @param string $filepath
      * @return bool|string
      */
-    public function rows(string $filepath) {
+    public function rows(string $filepath): bool|string
+    {
         $count = 0;
         $handle = fopen($filepath, 'r');
         while (fgets($handle)) $count++;

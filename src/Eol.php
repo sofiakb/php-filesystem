@@ -21,7 +21,7 @@ class Eol
      * NewL  Chars       Name     Description
      * ----- ----------- -------- ------------------------------------------------------------------
      * LF    0x0A        UNIX     Apple OSX, UNIX, Linux
-     * CR    0x0D        TRS80    Commodore, Acorn BBC, ZX Spectrum, TRS-80, Apple II family, etc
+     * CR    0x0D        TRS80    Commodore, Acorn BBC, ZX Spectrum, TRS-80, Apple II family, etc.
      * LFCR  0x0A 0x0D   ACORN    Acorn BBC and RISC OS spooled text output.
      * CRLF  0x0D 0x0A   WINDOWS  Microsoft Windows, DEC TOPS-10, RT-11 and most other early non-Unix
      * and non-IBM OSes, CP/M, MP/M, DOS (MS-DOS, PC DOS, etc.), OS/2,
@@ -32,7 +32,7 @@ class Eol
     const EOL_ACORN = 'lfcr';        // Code: \n \r
     const EOL_WINDOWS = 'crlf';      // Code: \r \n
     
-    const EOLS = [
+    const ENDS_OF_LINES = [
         self::EOL_ACORN   => '\n\r',
         self::EOL_WINDOWS => '\r\n',
         self::EOL_UNIX    => '\n',
@@ -41,7 +41,7 @@ class Eol
     
     public static function detect($str, &$key): string
     {
-        static $eols = array(
+        static $endsOfLines = array(
             self::EOL_ACORN   => "\n\r",  // 0x0A - 0x0D - acorn BBC
             self::EOL_WINDOWS => "\r\n",  // 0x0D - 0x0A - Windows, DOS OS/2
             self::EOL_UNIX    => "\n",    // 0x0A -      - Unix, OSX
@@ -51,7 +51,7 @@ class Eol
         $key = "";
         $curCount = 0;
         $curEol = '';
-        foreach ($eols as $k => $eol) {
+        foreach ($endsOfLines as $k => $eol) {
             if (($count = substr_count($str, $eol)) > $curCount) {
                 $curCount = $count;
                 $curEol = $eol;
@@ -62,12 +62,12 @@ class Eol
     }
     
     /**
-     * Detects the EOL of an file by checking the first line.
+     * Detects the EOL of a file by checking the first line.
      * @param string $filepath File to be tested (full pathname).
      * @return boolean false | Used key = enum('cr', 'lf', crlf').
      * @uses detect
      */
-    public static function detectFileEOL(string $filepath)
+    public static function detectFileEOL(string $filepath): bool
     {
         if (!FileFacade::exists($filepath)) {
             return false;
@@ -82,7 +82,7 @@ class Eol
         $key = "";
         self::detect($line, $key);
         
-        return self::EOLS[$key];
+        return self::ENDS_OF_LINES[$key];
     }
     
 }

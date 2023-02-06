@@ -16,22 +16,22 @@ class Finder
     /**
      * @var Finder|null
      */
-    private static $instance = null;
+    private static ?Finder $instance = null;
 
     /**
      * @var string $directory
      */
-    private $directory;
+    private string $directory;
 
     /**
      * @var bool $ignoreDotFiles
      */
-    private $ignoreDotFiles = false;
+    private bool $ignoreDotFiles = false;
 
     /**
      * @var array $files
      */
-    private $files;
+    private array $files;
 
     private function __construct()
     {
@@ -50,7 +50,7 @@ class Finder
     /**
      * @return Finder|null
      */
-    public static function create()
+    public static function create(): ?Finder
     {
         self::$instance = null;
         return self::getInstance();
@@ -60,7 +60,7 @@ class Finder
      * @param string $directory
      * @return $this
      */
-    public function in(string $directory)
+    public function in(string $directory): Finder
     {
         $this->directory = $directory;
         return $this;
@@ -70,7 +70,7 @@ class Finder
      * @param bool $ignore
      * @return $this
      */
-    public function ignoreDotFiles(bool $ignore)
+    public function ignoreDotFiles(bool $ignore): Finder
     {
         $this->ignoreDotFiles = $ignore;
         return $this;
@@ -79,7 +79,7 @@ class Finder
     /**
      * @return $this
      */
-    public function files()
+    public function files(): Finder
     {
         if (isset($this->directory)) {
             $this->files = [];
@@ -96,7 +96,7 @@ class Finder
     /**
      * @return $this
      */
-    public function directories()
+    public function directories(): Finder
     {
         if (isset($this->directory)) {
             $this->files = [];
@@ -114,7 +114,7 @@ class Finder
      * @param bool $case
      * @return $this
      */
-    public function sortByName(bool $case = false)
+    public function sortByName(bool $case = false): Finder
     {
         usort($this->files, function ($file1, $file2) use ($case) {
             return $case
@@ -125,9 +125,9 @@ class Finder
     }
 
     /**
-     * @return mixed
+     * @return array
      */
-    public function get()
+    public function get(): array
     {
         return $this->files;
     }
